@@ -33,13 +33,15 @@ function pointInSet(c) {
  * Start the calculation when a message is received from the main process.
  */
 onmessage = function(event) {
-    state = event.data;
+    state = JSON.parse(event.data);
+    var y = 0, yl = state.height;
+    var x = 0, xl = state.width;
     
-    for (var y = 0; y < state.height; y++) {
-        for (var x = 0; x < state.width; x++) {
+    for (; y < yl; y++) {
+        for (x = 0; x < xl; x++) {
             brot[x] = pointInSet(pointForPixel(x, y)) * state.scale;
         }
-        postMessage(brot); // send the results back whenever a line is ready
+        postMessage(JSON.stringify(brot)); // send the results back whenever a line is ready
     }
-    postMessage(null);
+    postMessage(JSON.stringify(null));
 }
